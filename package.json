@@ -1,0 +1,44 @@
+{
+  "name": "antigro-sdk",
+  "version": "1.0.0",
+  "description": "Node.js SDK for using Antigro Designer API",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup",
+    "dev": "tsx ./src/index.ts",
+    "format": "prettier --write .",
+    "lint": "tsc"
+  },
+  "homepage": "https://github.com/Imunal/antigro-sdk",
+  "bugs": {
+    "url": "https://github.com/Imunal/antigro-sdk/issues"
+  },
+  "keywords": [
+    "antigro",
+    "antigro designer",
+    "antigro api",
+    "typescript"
+  ],
+  "author": "Juliusz Kowalewski <juliusz@kowalewsky.dev> (https://kowalewsky.dev)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Imunal/antigro-sdk"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.2"
+  }
+}
