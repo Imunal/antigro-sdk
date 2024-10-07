@@ -6,11 +6,11 @@ const CreateClientDesignRequestSchema = z.object({
   productCode: z.string(),
   templateBindingType: z.string().optional(),
   templateId: z.string().optional(),
-  productParameters: z.object({}).optional(),
+  productParameters: z.record(z.any()).optional(), //Record any cuz its defined by the end API user.
   returnUrl: z.string().url(),
   volume: z.number().positive().optional(),
   orderId: z.string().optional(),
-  externalData: z.object({}).optional(),
+  externalData: z.record(z.any()).optional(), //Record any cuz its defined by the end API user.
 });
 
 export type CreateClientDesignRequest = z.infer<
