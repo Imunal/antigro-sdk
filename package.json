@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "build": "tsup",
     "dev": "tsx ./src/index.ts",
     "format": "prettier --write .",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.5",
+    "@vitest/coverage-v8": "^2.1.2",
     "prettier": "^3.3.3",
     "tsup": "^8.3.0",
     "tsx": "^4.19.1",
