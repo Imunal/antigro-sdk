@@ -2,10 +2,11 @@ import { SignJWT } from 'jose';
 
 export class AntigroServiceJWT {
   /**
-   * Function which generate JWT token, used for authentication with Antigro API.
-   * @param secretKey base64 secret key obtained from Antigro
-   * @param expirationTime - token expiration date, defaults to 10m
+   * @description Function which generate JWT token, used for authentication with Antigro API.
+   * @param {string} secretKey base64 secret key obtained from Antigro
+   * @param {string} expirationTime - token expiration date, defaults to 10m
    * @returns Promise<string>
+   * @throws Will throw an error if argument secretKey is null.
    */
   public async generateJWT({
     secretKey,
@@ -14,7 +15,11 @@ export class AntigroServiceJWT {
     secretKey: string;
     expirationTime?: string;
   }): Promise<string> {
-    if (!secretKey) throw new Error('Missing JWT secret');
+    //Check if secretKey is passed.
+    if (!secretKey) throw new Error('Missing secretKey');
+
+    //Check if secretKey is valid
+    if(typeof secretKey !== 'string') throw new Error('secretKey must be a string');
 
     return await new SignJWT()
       .setProtectedHeader({ alg: 'HS256', typ: 'JWT' }) //Set header
