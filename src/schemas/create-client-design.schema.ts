@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const CreateClientDesignRequestSchema = z.object({
+export const CreateClientDesignRequestSchema = z.object({
   sellerId: z.string(),
   brandId: z.string().optional(),
   productCode: z.string(),
@@ -19,7 +19,7 @@ export type CreateClientDesignRequest = z.infer<
 
 //
 
-const CreateClientDesignResponseSchema = z.object({
+export const CreateClientDesignResponseSchema = z.object({
   id: z.string(),
   thumb_url: z.string().url(),
 });

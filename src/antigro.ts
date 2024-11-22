@@ -2,16 +2,14 @@ import { AntigroHttpClientService } from './services/antigro-http-client.service
 import { AntigroServiceJWT } from './services/antigro-jwt.service';
 
 export class Antigro {
-  private antigroHttpClientService: AntigroHttpClientService;
-  private antigroJwtService: AntigroServiceJWT;
-
-  constructor() {
-    this.antigroHttpClientService = new AntigroHttpClientService();
-    this.antigroJwtService = new AntigroServiceJWT();
-  }
+  constructor(
+    private antigroHttpClientService: AntigroHttpClientService,
+    private antigroJwtService: AntigroServiceJWT,
+  ) {}
 
   /**
-   * Function which generate JWT token, used for authentication with Antigro API.
+   * @function createToken
+   * @description Function which generate JWT token, used for authentication with Antigro API.
    * @param secretKey base64 secret key obtained from Antigro
    * @param expirationTime - token expiration date, defaults to 10m
    * @returns Promise<string>
@@ -24,16 +22,17 @@ export class Antigro {
   }
 
   /**
-   * Functions returns information about design
+   * @function getClientDesign
+   * @description Functions returns information about design
+   * @param designId
+   * @param jwtToken
    */
-  public async getClientDesign({
-    designId,
-    jwtToken,
-  }: {
-    designId: string;
-    jwtToken: string;
-  }) {
-    return await this.antigroHttpClientService.getClientDesign();
+  public async getClientDesign(designId: string, jwtToken: string) {
+    const payload = {
+      designId,
+      jwtToken,
+    };
+    return await this.antigroHttpClientService.getClientDesign(payload);
   }
 
   public async createClientDesign({ jwtToken }: { jwtToken: string }) {}
