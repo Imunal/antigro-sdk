@@ -39,7 +39,7 @@ describe('AntigroHttpClientService', () => {
 
       //
       await expect(() => client.getClientDesign('123-123')).rejects.toThrow(
-        `getClientDesign request failed: Network error`,
+        `Network error in getClientDesign: Network error`,
       );
     });
 
@@ -55,7 +55,7 @@ describe('AntigroHttpClientService', () => {
 
       //
       await expect(() => client.getClientDesign('123-123')).rejects.toThrow(
-        `getClientDesign request failed: Network error`,
+        `Network error in getClientDesign: Network error`,
       );
     });
 
@@ -73,7 +73,7 @@ describe('AntigroHttpClientService', () => {
 
       //@ts-expect-error
       await expect(() => client.getClientDesign(payload)).rejects.toThrow(
-        `Schema validation errored in getClientDesign:`,
+        `Validation error in getClientDesign:`,
       );
     });
   });
@@ -128,7 +128,7 @@ describe('AntigroHttpClientService', () => {
 
       //
       await expect(() => client.createClientDesign(payload)).rejects.toThrow(
-        `createClientDesign request failed: Network error`,
+        `Network error in createClientDesign: Network error`,
       );
     });
 
@@ -150,7 +150,7 @@ describe('AntigroHttpClientService', () => {
 
       //
       await expect(() => client.createClientDesign(payload)).rejects.toThrow(
-        `createClientDesign request failed: Network error`,
+        `Network error in createClientDesign: Network error`,
       );
     });
 
@@ -170,7 +170,7 @@ describe('AntigroHttpClientService', () => {
 
       //@ts-expect-error
       await expect(() => client.createClientDesign(payload)).rejects.toThrow(
-        `Schema validation errored in createClientDesign:`,
+        `Validation error in createClientDesign:`,
       );
     });
   });
@@ -218,7 +218,7 @@ describe('AntigroHttpClientService', () => {
 
       //
       await expect(() => client.updateClientDesign(payload)).rejects.toThrow(
-        `updateClientDesign request failed: Network error`,
+        `Network error in updateClientDesign: Network error`,
       );
     });
 
@@ -238,7 +238,7 @@ describe('AntigroHttpClientService', () => {
 
       //
       await expect(() => client.updateClientDesign(payload)).rejects.toThrow(
-        `updateClientDesign request failed: Network error`,
+        `Network error in updateClientDesign: Network error`,
       );
     });
 
@@ -256,7 +256,7 @@ describe('AntigroHttpClientService', () => {
 
       //@ts-expect-error
       await expect(() => client.updateClientDesign(payload)).rejects.toThrow(
-        `Schema validation errored in updateClientDesign:`,
+        `Validation error in updateClientDesign:`,
       );
     });
   });

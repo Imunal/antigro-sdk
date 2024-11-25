@@ -73,9 +73,8 @@ export class AntigroHttpClientService extends HttpClient {
     data: CreateClientDesignRequest,
   ): Promise<CreateClientDesignResponse> {
     try {
-      const { designId } = data;
       //validate data before sending request.
-      const safe_data = CreateClientDesignRequestSchema.parse(designId);
+      const safe_data = CreateClientDesignRequestSchema.parse(data);
 
       //call endpoint
       const response = await this.sendRequest({
