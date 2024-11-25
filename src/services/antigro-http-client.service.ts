@@ -21,7 +21,7 @@ export class AntigroHttpClientService {
   private readonly DEV_API_URL = 'https://designer-test.antigro.com';
 
   //endpoints
-  private readonly GET_CLIENT_DESIGN_ENDPOINT = '/api/partner-backend/designs';
+  private readonly GET_CLIENT_DESIGN_ENDPOINT = 'api/partner-backend/designs';
 
   /**
    * @function getClientDesign
