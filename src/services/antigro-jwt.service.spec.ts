@@ -8,8 +8,8 @@ describe('AntigroServiceJWT', () => {
       expect,
     }) => {
       const jwtService = new AntigroServiceJWT();
-      //@ts-expect-error
       await expect(() =>
+        //@ts-expect-error
         jwtService.generateJWT({ secretKey: 123 }),
       ).rejects.toThrow('secretKey must be a string');
     });
@@ -18,8 +18,8 @@ describe('AntigroServiceJWT', () => {
       expect,
     }) => {
       const jwtService = new AntigroServiceJWT();
-      //@ts-expect-error
       await expect(() =>
+        //@ts-expect-error
         jwtService.generateJWT({ secretKey: undefined }),
       ).rejects.toThrow('Missing secretKey');
     });
@@ -28,8 +28,8 @@ describe('AntigroServiceJWT', () => {
       expect,
     }) => {
       const jwtService = new AntigroServiceJWT();
-      //@ts-expect-error
       await expect(() =>
+        //@ts-expect-error
         jwtService.generateJWT({ secretKey: null }),
       ).rejects.toThrow('Missing secretKey');
     });

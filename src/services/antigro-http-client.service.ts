@@ -1,31 +1,45 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
 
-//schemas
+//
+import { HttpClient } from './http-client';
 
+//schemas
 import {
   type GetClientDesignRequest,
   GetClientDesignRequestSchema,
   type GetClientDesignResponse,
   GetClientDesignResponseSchema,
 } from '../schemas/get-client-design.schema';
+import {
+  type CreateClientDesignRequest,
+  CreateClientDesignRequestSchema, type CreateClientDesignResponse,
+  CreateClientDesignResponseSchema,
+} from '../schemas/create-client-design.schema';
+import {
+  type UpdateClientDesignRequest, UpdateClientDesignRequestSchema,
+} from '../schemas/update-client-design.schema';
 
-export class AntigroHttpClientService {
-  constructor(
-    private api_secret_key: string,
-    private api_type: 'prod' | 'dev',
-  ) {}
+//exceptions
+import { AntigroError } from '../exceptions/antigro.exception';
 
-  //api env
-  private readonly PROD_API_URL = 'https://designer.antigro.com';
-  private readonly DEV_API_URL = 'https://designer-test.antigro.com';
+/**
+ * @class
+ */
+export class AntigroHttpClientService extends HttpClient {
+
+  constructor(api_secret_key: string, api_type: 'prod' | 'dev') {
+    super(api_secret_key, api_type);
+  }
 
   //endpoints
   private readonly GET_CLIENT_DESIGN_ENDPOINT = 'api/partner-backend/designs';
+  private readonly CREATE_CLIENT_DESIGN_ENDPOINT = 'api/partner-backend/designs';
+  private readonly UPDATE_CLIENT_DESIGN_ENDPOINT = 'api/partner-backend/designs';
 
   /**
-   * @function getClientDesign
-   * @description Function which is responsible to call getClientDesign endpoint in Antigro API, parse, and returns valid.
+   * getClientDesign
+   * @remarks Function which is responsible to call getClientDesign endpoint in Antigro API, parse, and returns valid.
    * @param data
    * @returns Promise<GetClientDesignResponse>
    */
@@ -38,67 +52,98 @@ export class AntigroHttpClientService {
 
       //call endpoint
       const response = await this.sendRequest({
-        endpoint: `${this.GET_CLIENT_DESIGN_ENDPOINT}/${safe_data.designId}`,
+        endpoint: `${this.GET_CLIENT_DESIGN_ENDPOINT}/${safe_data}`,
         method: 'get',
       });
 
       //return parsed response payload
       return GetClientDesignResponseSchema.parse(response);
     } catch (error: unknown) {
-      console.error(error);
-      if (error instanceof AxiosError) {
-        throw new Error(`getClientDesign request failed: ${error.message}`);
-      } else if (error instanceof ZodError) {
-        throw new Error(
-          `Schema validation errored in getClientDesign: ${error.errors}`,
-        );
-      }
-      throw new Error(`Something went wrong: ${error}`);
+      return this.handleError(error, 'getClientDesign');
     }
   }
 
   /**
-   * @function sendRequest
-   * @param method
-   * @param endpoint
-   * @param params
+   * createClientDesign
+   * @remarks Function which is responsible to call createClientDesign endpoint in Antigro API, parse, and returns valid.
    * @param data
-   * @protected
+   * @returns Promise<CreateClientDesignResponse>
    */
-  protected async sendRequest<T>({
-    method,
-    endpoint,
-    params,
-    data,
-  }: {
-    method: 'get' | 'post' | 'put' | 'delete' | 'patch';
-    endpoint: string;
-    params?: T;
-    data?: T;
-  }) {
-    const api_endpoint = this.getApiType();
-    const axios_config = {
-      method,
-      url: `${api_endpoint}/${endpoint}`,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${this.api_secret_key}`,
-      },
-      params,
-      data,
-    };
+  public async createClientDesign(
+    data: CreateClientDesignRequest,
+  ): Promise<CreateClientDesignResponse> {
+    try {
+      const { designId } = data;
+      //validate data before sending request.
+      const safe_data = CreateClientDesignRequestSchema.parse(designId);
 
-    const response = await axios(axios_config);
-    return response.data;
+      //call endpoint
+      const response = await this.sendRequest({
+        endpoint: `${this.CREATE_CLIENT_DESIGN_ENDPOINT}`,
+        method: 'post',
+        data: JSON.stringify(safe_data),
+      });
+
+      //return parsed response payload
+      return CreateClientDesignResponseSchema.parse(response);
+    } catch (error: unknown) {
+      return this.handleError(error, 'createClientDesign');
+    }
+  }
+
+
+  /**
+   * updateClientDesign
+   * @remarks Function which is responsible to call updateClientDesign endpoint in Antigro API, parse, and returns valid.
+   * @param data
+   * @returns Promise<UpdateClientDesignRequest>
+   */
+  public async updateClientDesign(
+    data: UpdateClientDesignRequest,
+  ): Promise<boolean> {
+    try {
+      //validate data before sending request.
+      const safe_data = UpdateClientDesignRequestSchema.parse(data);
+
+      //call endpoint
+      await this.sendRequest({
+        endpoint: `${this.UPDATE_CLIENT_DESIGN_ENDPOINT}/${safe_data.designId}`,
+        method: 'patch',
+        data: JSON.stringify(safe_data),
+      });
+
+      return true;
+    } catch (error: unknown) {
+      return this.handleError(error, 'updateClientDesign');
+    }
   }
 
   /**
-   * @function getApiType
-   * @description Just specify api_type and return the environment it is assigned to
-   * @protected
+   * Internal error handling method
+   * @param error - Unknown error to process
+   * @param context - Context of the error (method name)
+   * @throws AntigroApiError
    */
-  protected getApiType() {
-    return this.api_type === 'prod' ? this.PROD_API_URL : this.DEV_API_URL;
+  private handleError(error: unknown, context: string): never {
+    console.error(`[Antigro Error in ${context}]:`, error);
+
+    if (error instanceof AxiosError) {
+      throw new AntigroError(
+        `Network error in ${context}: ${error.message}`,
+        'NETWORK',
+      );
+    }
+
+    if (error instanceof ZodError) {
+      throw new AntigroError(
+        `Validation error in ${context}: ${JSON.stringify(error.errors)}`,
+        'VALIDATION',
+      );
+    }
+
+    throw new AntigroError(
+      `Unexpected error in ${context}: ${String(error)}`,
+      'UNKNOWN',
+    );
   }
 }

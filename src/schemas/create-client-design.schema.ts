@@ -11,7 +11,7 @@ export const CreateClientDesignRequestSchema = z.object({
   volume: z.number().positive().optional(),
   orderId: z.string().optional(),
   externalData: z.record(z.any()).optional(), //Record any cuz its defined by the end API user.
-});
+}).passthrough();
 
 export type CreateClientDesignRequest = z.infer<
   typeof CreateClientDesignRequestSchema
@@ -21,7 +21,7 @@ export type CreateClientDesignRequest = z.infer<
 
 export const CreateClientDesignResponseSchema = z.object({
   id: z.string(),
-  thumb_url: z.string().url(),
+  thumbUrl: z.string().url(),
 });
 
 export type CreateClientDesignResponse = z.infer<

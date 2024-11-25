@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+//
 const priceSchema = z.object({
   net: z.number(),
   tax: z.number(),
@@ -14,13 +15,14 @@ const projectPriceSchema = z.object({
   currency: z.string(),
 });
 
-export const UpdateClientDesignResponse = z.object({
-  status: z.string(), //Same story as in GetClientDesignSchema,
-  price: priceSchema,
-  projectPrices: z.record(projectPriceSchema), // Use record there cuz key's are dynamic.
-  orderId: z.string(),
+export const UpdateClientDesignRequestSchema = z.object({
+  designId: z.string(),
+  status: z.string().optional(), //Same story as in GetClientDesignSchema,
+  price: priceSchema.optional(),
+  projectPrices: z.record(projectPriceSchema).optional(), // Use record there cuz key's are dynamic.
+  orderId: z.string().optional(),
 });
 
-export type UpdateClientDesignResponse = z.infer<
-  typeof UpdateClientDesignResponse
+export type UpdateClientDesignRequest = z.infer<
+  typeof UpdateClientDesignRequestSchema
 >;
